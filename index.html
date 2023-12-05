@@ -1,0 +1,203 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100vh;
+        }
+        .button {
+            width: 200px;
+            height: 50px;
+            margin: 2px; /* 将按钮的外边距缩小为 2 像素 */
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 20px;
+        }
+        .button1 {
+            width: 200px;
+            height: 50px;
+            margin: 2px; /* 将按钮的外边距缩小为 2 像素 */
+            border: none;
+            border-radius: 10px;
+            background-color: transparent;
+            color: black;
+            font-size: 30px;
+        }
+        .box {
+            width: 200px; /* 将方框的宽度增加为 200 像素 */
+            height: 100px;
+            margin: 0px; /* 将方框的外边距缩小为 5 像素 */
+            border: 0px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .box1 {
+            width: 200px; /* 将方框的宽度增加为 200 像素 */
+            height: 100px;
+            margin: 0px; /* 将方框的外边距缩小为 5 像素 */
+            border: 0px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* 这是一个媒体查询，用于在屏幕宽度小于或等于 600 像素的设备上，设置不同的样式规则 */
+        @media screen and (max-width: 600px) {
+            .button {
+                width: 100px; /* 将按钮的宽度缩小为 100 像素 */
+            }
+            .button1 {
+                width: 300px; /* 将按钮的宽度缩小为 100 像素 */
+            }
+            .box {
+                width: 150px; /* 将方框的宽度缩小为 50 像素 */
+                height: 40px; /* 将方框的高度缩小为 50 像素 */
+            }
+            .box1 {
+                width: 150px; /* 将方框的宽度缩小为 50 像素 */
+                height: 40px; /* 将方框的高度缩小为 50 像素 */
+            }
+        }
+    </style>
+    <script>
+        // 这是一个函数，用于生成一个在最小值和最大值之间的随机数
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // 这是一个函数，用于打乱一个数组的顺序
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = getRandomNumber(0, i);
+                let temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+
+        // 这是一个函数，用于在方框中显示随机的内容
+        function displayContent(button) {
+            // 这是一个对象，存放了每个按钮对应的内容数组
+             let contentMap = {
+                "单音": ["A", "B", "C", "D", "E", "F", "G", "A♯", "C♯", "D♯", "F♯", "G♯", "A♭", "B♭",  "D♭", "E♭",  "G♭" ],
+                "C调和弦": ["C", "Dm", "Em", "F", "G", "Am","C/E","C/G","Dm/F","Dm/A","Em/G","Em/B","F/A","F/C","G/B","G/D","Am/C","Am/E","CM7","Dm7", "Em7", "FM7", "G7", "Am7"],
+                "D♭调和弦": ["D♭","E♭m", "Fm", "G♭", "A♭", "B♭m","D♭/F","E♭m/G♭", "Fm/A♭", "G♭/B♭", "A♭/C", "B♭m/D♭","D♭/A♭","E♭m/B♭", "Fm/C", "G♭/D♭", "A♭/E♭", "B♭m/F","D♭M7","E♭m7", "Fm7", "G♭M7", "A♭7", "B♭m7"],
+                "D调和弦": ["D","Em", "Fm", "G", "A", "Bm","D/F♯","D/A","Em/G","Em/B","F♯m/A","F♯m/C♯","G/B","G/D","A/C♯","A/E","Bm/D","Bm/F♯","DM7","Em7", "F♯m7", "GM7", "A7", "Bm7"],
+                "E♭调和弦": ["E♭","Fm", "Gm", "A♭", "B♭", "Cm","E♭/G","E♭/B♭","Fm/A♭", "Fm/C","Gm/B♭","Gm/D", "A♭/C", "A♭/E♭","B♭/D", "B♭/F","Cm/E♭","Cm/G","E♭M7","Fm7", "Gm7", "A♭M7", "B♭7", "Cm7"],
+                "E调和弦": ["E","F♯m", "G♯m", "A", "B", "C♯m","E/G♯","F♯m/A", "G♯m/B", "A/C♯", "B/D♯", "C♯m/E","E/B","F♯m/C♯", "G♯m/D♯", "A/E", "B/F♯", "C♯m/G♯","EM7","F♯m7", "G♯m7", "AM7", "B7", "C♯m7"],
+                "F调和弦": ["F","Gm", "Am", "B♭", "C", "Dm","F/A","Gm/B♭", "Am/C", "B♭/D", "C/E", "Dm/F","F/C","Gm/D", "Am/E", "B♭/F", "C/G", "Dm/A","FM7","Gm7", "Am7", "B♭M7", "C7", "Dm7"],
+                "G♭调和弦": ["G♭","A♭m", "B♭m", "B", "D♭", "E♭m","G♭/B♭","A♭m/B", "B♭m/D♭", "B/E♭", "D♭/F", "E♭m/G♭","G♭/D♭","A♭m/E♭", "B♭m/F", "B/G♭", "D♭/A♭", "E♭m/B♭","G♭M7","A♭m7", "B♭m7", "BM7", "D♭7", "E♭m7"],
+                "G调和弦": ["G","Am", "Bm", "C", "D", "Em","G/B","Am/C", "Bm/D", "C/E", "D/F♯", "Em/G","G/D","Am/E", "Bm/F♯", "C/G", "D/A", "Em/B","GM7","Am7", "Bm7", "CM7", "D7", "Em7",],
+                "A♭调和弦": ["A♭","B♭m", "Cm", "D♭", "E♭", "Fm","A♭/C","B♭m/D♭", "Cm/E♭", "D♭/F", "E♭/G", "Fm/A♭","A♭/E♭","B♭m/F", "Cm/G", "D♭/A♭", "E♭/B♭", "Fm/C","A♭M7","B♭m7", "Cm7", "D♭M7", "E♭7", "Fm7"],
+                "A调和弦": ["A","Bm", "C♯m", "D", "E", "F♯m","A/C♯","Bm/D", "C♯m/E", "D/F♯", "E/G♯", "F♯m/A","A/E","Bm/F♯", "C♯m/G♯", "D/A", "E/B", "F♯m/C♯","AM7","Bm7", "C♯m7", "DM7", "E7", "F♯m7"],
+                "B♭调和弦": ["B♭","Cm", "Dm", "E♭", "F", "Gm","B♭/D","Cm/E♭", "Dm/F", "E♭/G", "F/A", "Gm/B♭","B♭/F","Cm/G", "Dm/A", "E♭/B♭", "F/C", "Gm/D","B♭M7","Cm7", "Dm7", "E♭M7", "F7", "Gm7"],
+                "B调和弦": ["B","C♯m", "D♯m", "E", "F♯", "G♯m","B/D♯","C♯m/E", "D♯m/F♯", "E/G♯", "F♯/A♯", "G♯m/B","B/F♯","C♯m/G♯", "D♯m/A♯", "E/B", "F♯/C♯", "G♯m/D♯","BM7","C♯m7", "D♯m7", "EM7", "F♯7", "G♯m7"],
+                "原位和弦": ["A", "B", "C", "D", "E", "F", "G", "Am", "Bm", "Cm", "Dm", "Em", "Fm", "Gm","A♯m", "C♯m", "D♯m", "F♯m", "G♯m", "A♭m", "B♭m",  "D♭m", "E♭m", "G♭m" ],
+                "转位和弦": ["A/C♯", "B/D♯", "C/E", "D/F♯", "E/G♯", "F/A", "G/B","A/E", "B/F♯", "C/G", "D/A", "E/B", "F/C", "G/D","Am/C", "Bm/D", "Cm/E♭", "Dm/F", "Em/G", "Fm/A♭", "Gm/B♭","Am/E", "Bm/F♯", "Cm/G", "Dm/A", "Em/B", "Fm/C", "Gm/D","A♯m/C♯", "C♯m/E", "D♯m/F♯", "F♯m/A", "G♯m/B","A♯m/F", "C♯m/G♯", "D♯m/A♯", "F♯m/C♯", "G♯m/D♯","A♭m/B", "B♭m/D♭", "D♭m/E", "E♭m/G♭", "G♭m/A","A♭m/E♭", "B♭m/F", "D♭m/A♭", "E♭m/B♭", "G♭m/D♭"],
+                "七和弦": ["A7", "B7", "C7", "D7", "E7", "F7", "G7", "Am7", "Bm7", "Cm7", "Dm7", "Em7", "Fm7", "Gm7","A♯m7", "C♯m7", "D♯m7", "F♯m7", "G♯m7", "A♭m7", "B♭m7",  "D♭m7", "E♭m7", "G♭m7"],
+                "混合": ["单音A", "单音B", "单音C", "单音D", "单音E", "单音F", "单音G", "单音A♯", "单音C♯", "单音D♯", "单音F♯", "单音G♯", "单音A♭", "单音B♭",  "单音D♭", "单音E♭",  "单音G♭","A", "B", "C", "D", "E", "F", "G", "Am", "Bm", "Cm", "Dm", "Em", "Fm", "Gm","A♯m", "C♯m", "D♯m", "F♯m", "G♯m", "A♭m", "B♭m",  "D♭m", "E♭m", "G♭m","A/C♯", "B/D♯", "C/E", "D/F♯", "E/G♯", "F/A", "G/B","A/E", "B/F♯", "C/G", "D/A", "E/B", "F/C", "G/D","Am/C", "Bm/D", "Cm/E♭", "Dm/F", "Em/G", "Fm/A♭", "Gm/B♭","Am/E", "Bm/F♯", "Cm/G", "Dm/A", "Em/B", "Fm/C", "Gm/D","A♯m/C♯", "C♯m/E", "D♯m/F♯", "F♯m/A", "G♯m/B","A♯m/F", "C♯m/G♯", "D♯m/A♯", "F♯m/C♯", "G♯m/D♯","A♭m/B", "B♭m/D♭", "D♭m/E", "E♭m/G♭", "G♭m/A","A♭m/E♭", "B♭m/F", "D♭m/A♭", "E♭m/B♭", "G♭m/D♭","A7", "B7", "C7", "D7", "E7", "F7", "G7", "Am7", "Bm7", "Cm7", "Dm7", "Em7", "Fm7", "Gm7","A♯m7", "C♯m7", "D♯m7", "F♯m7", "G♯m7", "A♭m7", "B♭m7",  "D♭m7", "E♭m7", "G♭m7"]
+            };
+            // 这是一个变量，存放了点击的按钮的文本
+            let buttonText = button.innerHTML;
+            // 这是一个变量，存放了点击的按钮对应的内容数组
+            let content = contentMap[buttonText];
+            // 这是一个数组，存放了方框的元素
+            let boxes = document.getElementsByClassName("box");
+            // 这是一个变量，存放了方框的数量
+            let numBoxes = boxes.length;
+            // 这是一个变量，存放了内容的数量
+            let numContent = content.length;
+            // 这是一个检查，确保内容的数量大于或等于方框的数量
+            if (numContent >= numBoxes) {
+                // 这是一个打乱内容数组的操作
+                shuffleArray(content);
+                // 这是一个循环，用于在方框中显示内容
+                for (let i = 0; i < numBoxes; i++) {
+                    // 这是一个获取第i个方框的操作
+                    let box = boxes[i];
+                    // 这是一个获取第i个内容的操作
+                    let text = content[i];
+                    // 这是一个设置方框的文本为内容的操作
+                    box.innerHTML = text;
+                }
+            } else {
+                // 这是一个提醒用户内容数量不足的操作
+                alert("The number of content is not enough. Please set at least " + numBoxes + " content.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <button class="button1">键盘基础练习</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="displayContent(this);">C调和弦</button>
+            <button class="button" onclick="displayContent(this);">D♭调和弦</button>
+            <button class="button" onclick="displayContent(this);">D调和弦</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="displayContent(this);">E♭调和弦</button>
+            <button class="button" onclick="displayContent(this);">E调和弦</button>
+            <button class="button" onclick="displayContent(this);">F调和弦</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="displayContent(this);">G♭调和弦</button>
+            <button class="button" onclick="displayContent(this);">G调和弦</button>
+            <button class="button" onclick="displayContent(this);">A♭调和弦</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="displayContent(this);">A调和弦</button>
+            <button class="button" onclick="displayContent(this);">B♭调和弦</button>
+            <button class="button" onclick="displayContent(this);">B调和弦</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="displayContent(this);">单音</button>
+            <button class="button" onclick="displayContent(this);">原位和弦</button>
+            <button class="button" onclick="displayContent(this);">转位和弦</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="displayContent(this);">七和弦</button>
+            <button class="button" onclick="displayContent(this);">混合</button>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box"></div>
+        </div>
+        <div class="row">
+            <div class="box1"></div>
+        </div>
+    </div>
+</body>
+</html>
